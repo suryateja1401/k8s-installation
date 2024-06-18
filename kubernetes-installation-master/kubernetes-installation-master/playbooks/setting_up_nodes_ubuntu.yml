@@ -76,10 +76,11 @@
     when: aptkey.changed
 
   - name: Adding repository details in Kubernetes repo file.
-    blockinfile:
-     path: /etc/apt/sources.list.d/kubernetes.list
-     block: |
-       deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main
+  blockinfile:
+    path: /etc/apt/sources.list.d/kubernetes.list
+    block: |
+      deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-focal main
+
 
   - name: updating cache
     apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
