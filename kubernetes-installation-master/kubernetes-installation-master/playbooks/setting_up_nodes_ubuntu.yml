@@ -60,30 +60,28 @@
 
 # Kubernetes configuration 
   - name: Creating a repository file for Kubernetes
-    file:
-     path: /etc/apt/sources.list.d/kubernetes.list
-     state: touch
+  file:
+    path: /etc/apt/sources.list.d/kubernetes.list
+    state: touch
 
-  - name: Download repo key
-    get_url:
-      # url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
-      url: https://dl.k8s.io/apt/doc/apt-key.gpg
-      dest: /usr/share/keyrings/kubernetes-archive-keyring.gpg
-    register: aptkey
+- name: Download repo key
+  get_url:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    dest: /usr/share/keyrings/kubernetes-archive-keyring.gpg
+  register: aptkey
 
-  - name: Adding the repo keys
-    command: apt-key add /usr/share/keyrings/kubernetes-archive-keyring.gpg
-    when: aptkey.changed
+- name: Adding the repo keys
+  command: apt-key add /usr/share/keyrings/kubernetes-archive-keyring.gpg
+  when: aptkey.changed
 
-  - name: Adding repository details in Kubernetes repo file.
+- name: Adding repository details in Kubernetes repo file.
   blockinfile:
     path: /etc/apt/sources.list.d/kubernetes.list
     block: |
       deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-focal main
 
-
-  - name: updating cache
-    apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+- name: updating cache
+  apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
 
   - name: Installing required packages
     apt:
